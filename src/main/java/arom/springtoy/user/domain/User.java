@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.UUID;
-import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -32,12 +32,13 @@ public class User {
     @NotNull
     @NotBlank
     private String passwordUUID;
-    @NotNull
-    @NotBlank
+
+    @NotNull @NotBlank
+    @Size(min = 1, max = 30)
+    @Column(unique = true)
     private String nickname;
 
-    public User(Long userId, String email, String password, String nickname) {
-        this.userId = userId;
+    public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
