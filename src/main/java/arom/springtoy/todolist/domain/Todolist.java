@@ -3,6 +3,7 @@ package arom.springtoy.todolist.domain;
 import arom.springtoy.todolist.dto.DateDto;
 import arom.springtoy.user.domain.User;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,15 +11,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Getter
-@Builder
 public class Todolist {
 
     @Id
@@ -29,8 +31,12 @@ public class Todolist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
-    @Size(min = 1, max = 64)
+    @NotNull @NotBlank
+    @Column(unique = true)
+    private String todoListName;
+
+    @NotNull @NotBlank
+    @Size(min = 1, max = 30)
     private String writer;
 
     @NotNull
@@ -42,11 +48,12 @@ public class Todolist {
     @NotNull
     private LocalDateTime endDate;
 
-    public Todolist(User user, String writer, Boolean isSuccess,
+    public Todolist(User user, String writer, String todoListName,
         DateDto startDate, DateDto endDate) {
         this.user = user;
         this.writer = writer;
-        this.isSuccess = isSuccess;
+        this.todoListName = todoListName;
+        this.isSuccess = false;
         this.startDate = getDate(startDate);
         this.endDate = getDate(endDate);
     }
