@@ -7,6 +7,7 @@ import arom.springtoy.user.repository.UserRepository;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import java.util.Optional;
+import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,14 @@ class UserTest {
 
         assertThatThrownBy(() -> userRepository.save(user1))
             .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @Transactional
+    void 패스워드_nameUUIDFromBytes_기능_확인(){
+        String testPassword = "hello";
+        String uuid1 = UUID.nameUUIDFromBytes(testPassword.getBytes()).toString();
+        String uuid2 = UUID.nameUUIDFromBytes(testPassword.getBytes()).toString();
+        assertThat(uuid1).isEqualTo(uuid2);
     }
 }
