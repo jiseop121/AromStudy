@@ -25,7 +25,7 @@ public class Content {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contentId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todolist_id")
     private Todolist todolist;
 
@@ -44,6 +44,22 @@ public class Content {
         this.contentName = contentName;
         this.description = description;
         this.isSuccess = false;
+    }
+
+    public void modifyOnlyServiceTodolist(Todolist todolist) {
+        this.todolist = todolist;
+    }
+
+    public void modifyOnlyServiceContentName(String contentName) {
+        this.contentName = contentName;
+    }
+
+    public void modifyOnlyServiceDescription(String description) {
+        this.description = description;
+    }
+
+    public void modifyOnlyServiceIsSuccess(Boolean isSuccess) {
+        this.isSuccess = isSuccess;
     }
 
     public Content() {
