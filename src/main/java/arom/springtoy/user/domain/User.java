@@ -28,9 +28,6 @@ public class User {
 
     @NotNull
     @NotBlank
-    private String password;
-    @NotNull
-    @NotBlank
     private String passwordUUID;
 
     @NotNull @NotBlank
@@ -40,15 +37,11 @@ public class User {
 
     public User(String email, String password, String nickname) {
         this.email = email;
-        this.password = password;
         this.nickname = nickname;
-        this.passwordUUID = UUID.randomUUID().toString();
+        this.passwordUUID = UUID.nameUUIDFromBytes(password.getBytes()).toString();
     }
 
     public User() {
 
     }
-
-
-
 }
