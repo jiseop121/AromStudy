@@ -15,9 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Getter
@@ -27,7 +25,7 @@ public class Todolist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long todolistId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -48,6 +46,30 @@ public class Todolist {
     @NotNull
     private LocalDateTime endDate;
 
+    public Todolist() {
+
+    }
+
+    public void modifyOnlyServiceTodoListName(String todoListName) {
+        this.todoListName = todoListName;
+    }
+
+    public void modifyOnlyServiceWriter(String writer) {
+        this.writer = writer;
+    }
+
+    public void modifyOnlyServiceIsSuccess(Boolean isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public void modifyOnlyServiceStartDate(DateDto startDate) {
+        this.startDate =getDate(startDate);
+    }
+
+    public void modifyOnlyServiceEndDate(DateDto endDate) {
+        this.endDate = getDate(endDate);
+    }
+
     public Todolist(User user, String writer, String todoListName,
         DateDto startDate, DateDto endDate) {
         this.user = user;
@@ -58,12 +80,8 @@ public class Todolist {
         this.endDate = getDate(endDate);
     }
 
-    private static LocalDateTime getDate(DateDto dateDto) {
+    private LocalDateTime getDate(DateDto dateDto) {
         return LocalDateTime.of(dateDto.getYear(), dateDto.getMonth(),
             dateDto.getDayOfMonth(), dateDto.getHour(), dateDto.getMinute());
-    }
-
-    public Todolist() {
-
     }
 }
