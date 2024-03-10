@@ -57,12 +57,12 @@ public class InitData {
 
         Content content1 = new Content(
             todolist1,
-            "testContent",
+            "testContent1",
             "write down what to do"
         );
         Content content2 = new Content(
             todolist1,
-            "testContent",
+            "testContent2",
             "write down what to do"
         );
         contentRepository.save(content1);
