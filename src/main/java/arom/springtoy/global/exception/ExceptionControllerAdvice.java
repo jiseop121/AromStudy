@@ -1,7 +1,9 @@
 package arom.springtoy.global.exception;
 
+import arom.springtoy.domain.exception.ContentException;
 import arom.springtoy.domain.exception.JoinException;
 import arom.springtoy.domain.exception.LoginException;
+import arom.springtoy.domain.exception.TodolistException;
 import arom.springtoy.global.exception.dto.ServiceErrorResult;
 import arom.springtoy.global.exception.dto.ValidErrorResult;
 import java.time.LocalDateTime;
@@ -33,15 +35,25 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(LoginException.class)
     public ServiceErrorResult exceptionLogin(LoginException e){
-        log.info("exceptionLogin LoginException= {}",e.toString());
-        String message = e.getMessage();
+//        log.info("exceptionLogin LoginException= {}",e.toString());
         return new ServiceErrorResult(LocalDateTime.now(),HttpStatus.BAD_REQUEST.value(),"LoginController",e.getMessage() );
     }
 
     @ExceptionHandler(JoinException.class)
     public ServiceErrorResult exceptionJoin(JoinException e){
-        log.info("exceptionLogin JoinException= {}",e.toString());
-        String message = e.getMessage();
+//        log.info("exceptionLogin JoinException= {}",e.toString());
         return new ServiceErrorResult(LocalDateTime.now(),HttpStatus.BAD_REQUEST.value(),"JoinController",e.getMessage() );
+    }
+
+    @ExceptionHandler(ContentException.class)
+    public ServiceErrorResult exceptionContent(ContentException e){
+//        log.info("exceptionLogin JoinException= {}",e.toString());
+        return new ServiceErrorResult(LocalDateTime.now(),HttpStatus.BAD_REQUEST.value(),"ContentController",e.getMessage() );
+    }
+
+    @ExceptionHandler(TodolistException.class)
+    public ServiceErrorResult exceptionJoin(TodolistException e){
+//        log.info("exceptionLogin JoinException= {}",e.toString());
+        return new ServiceErrorResult(LocalDateTime.now(),HttpStatus.BAD_REQUEST.value(),"TodolistController",e.getMessage() );
     }
 }
