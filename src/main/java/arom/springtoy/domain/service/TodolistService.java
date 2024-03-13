@@ -1,12 +1,18 @@
 package arom.springtoy.domain.service;
 
+import arom.springtoy.domain.controller.user.UserSession;
 import arom.springtoy.domain.domain.Todolist;
 import arom.springtoy.domain.dto.DateDto;
+import arom.springtoy.domain.dto.LoginDto;
 import arom.springtoy.domain.dto.PutTodolistDto;
 import arom.springtoy.domain.dto.TodolistDto;
 import arom.springtoy.domain.repository.TodolistRepository;
 import arom.springtoy.domain.domain.User;
+import arom.springtoy.domain.repository.UserRepository;
+import arom.springtoy.domain.validation.TodolistValidation;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,22 +26,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class TodolistService {
 
     private final TodolistRepository todolistRepository;
+    private final TodolistValidation todolistValidation;
+    private final UserRepository userRepository;
+    private final UserSession userSession;
 
-    public LocalDateTime dateDtoToLocal(DateDto dateDto) {
-        return LocalDateTime.of(dateDto.getYear(), dateDto.getMonth(),
-            dateDto.getDayOfMonth(), dateDto.getHour(), dateDto.getMinute());
+    public List<Todolist> findAllTodolistByUser(User user){
+        return todolistRepository.findAllByUser(user);
+    }
+
+    public Todolist findById(Long id){
+        return todolistRepository.findById(id).get();
+    }
+
+    public User getUserFormLoginDto(HttpServletRequest request) {
+        todolistValidation.checkAlreadyLogout(request);
+        return getUser(userSession.getLoginDtoFromSession(request));
+    }
+
+    private User getUser(LoginDto loginUser) {
+        Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
+        todolistValidation.checkRightLogin(user);
+        return user.get();
     }
 
     public Long addTodolist(User user, TodolistDto todolistDto){
         Optional<Todolist> todolistByName = todolistRepository.findByTodoListNameAndUser(
             todolistDto.getTodolistName(), user);
-        if(todolistByName.isPresent()){
-            throw new RuntimeException();
-        }
 
-        if(dateDtoToLocal(todolistDto.getStartDate()).isAfter(dateDtoToLocal(todolistDto.getEndDate()))){
-            throw new RuntimeException();
-        }
+        todolistValidation.checkTodolistEmpty(todolistByName);
+        todolistValidation.checkCorrectLocalDate(
+            dateDtoToLocal(todolistDto.getStartDate()),
+            dateDtoToLocal(todolistDto.getEndDate())
+        );
 
         Todolist newTodoList = new Todolist(
             user,
@@ -49,18 +71,11 @@ public class TodolistService {
     }
 
     public String deleteTodolist(User user, Long todolistId){
-        log.info("user = {} ",user.getUserId());
-        log.info("user = {} ",user.getNickname());
-        log.info("user = {}",user.getEmail());
         Optional<Todolist> deleteTodolist = todolistRepository.findById(todolistId);
-        log.info("deleteTodolist = {}",deleteTodolist.get().getTodolistId());
-        log.info("deleteTodolist = {}",deleteTodolist.get().getTodoListName());
-        if(deleteTodolist.isEmpty()){
-            throw new RuntimeException( );
-        }
-        if(deleteTodolist.get().getUser()!=user){
-            throw new RuntimeException();
-        }
+
+        todolistValidation.checkTodolistExist(deleteTodolist);
+        todolistValidation.checkTodolistRightUser(deleteTodolist.get().getUser(), user);
+
         String deletedTodolistName = deleteTodolist.get().getTodoListName();
 
         todolistRepository.deleteByTodolistId(todolistId);
@@ -70,12 +85,9 @@ public class TodolistService {
 
     public Todolist modifyTodolist(User user, Long todolistId, PutTodolistDto todolistDto){
         Optional<Todolist> changeTodolist = todolistRepository.findById(todolistId);
-        if(changeTodolist.isEmpty()) {
-            throw new RuntimeException();
-        }
-        if(changeTodolist.get().getUser()!=user){
-            throw new RuntimeException();
-        }
+
+        todolistValidation.checkTodolistExist(changeTodolist);
+        todolistValidation.checkTodolistRightUser(changeTodolist.get().getUser(), user);
 
         if(todolistDto.getTodolistName()!=null) changeTodolist.get().modifyOnlyServiceTodoListName(todolistDto.getTodolistName());
         if(todolistDto.getWriter()!=null) changeTodolist.get().modifyOnlyServiceWriter(todolistDto.getWriter());
@@ -84,5 +96,10 @@ public class TodolistService {
         if(todolistDto.getEndDate()!=null) changeTodolist.get().modifyOnlyServiceEndDate(todolistDto.getEndDate());
 
         return changeTodolist.get();
+    }
+
+    private LocalDateTime dateDtoToLocal(DateDto dateDto) {
+        return LocalDateTime.of(dateDto.getYear(), dateDto.getMonth(),
+            dateDto.getDayOfMonth(), dateDto.getHour(), dateDto.getMinute());
     }
 }

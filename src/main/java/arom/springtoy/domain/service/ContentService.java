@@ -1,5 +1,6 @@
 package arom.springtoy.domain.service;
 
+import arom.springtoy.domain.controller.user.UserSession;
 import arom.springtoy.domain.domain.Content;
 import arom.springtoy.domain.dto.ContentDto;
 import arom.springtoy.domain.dto.PutContentDto;
@@ -9,6 +10,8 @@ import arom.springtoy.domain.repository.TodolistRepository;
 import arom.springtoy.domain.domain.User;
 import arom.springtoy.domain.dto.LoginDto;
 import arom.springtoy.domain.repository.UserRepository;
+import arom.springtoy.domain.validation.ContentValidation;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +28,23 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final TodolistRepository todolistRepository;
     private final UserRepository userRepository;
+    private final ContentValidation contentValidation;
+    private final UserSession userSession;
 
     public List<Content> findAllByTodolistId(Long todolistId){
         return  contentRepository.findAllByTodolist(todolistRepository.findById(todolistId).get());
     }
 
-    public void blockContent(LoginDto loginUser, Long todolistId) {
-        User user = userRepository.findByEmail(loginUser.getEmail()).get();
-        if (todolistRepository.findByTodolistIdAndUser(todolistId, user).isEmpty()) {
-            throw new RuntimeException();
-        }
+    public void blockContent(HttpServletRequest request, Long todolistId) {
+        User user = userRepository.findByEmail(getLoginDto(request).getEmail()).get();
+        Optional<Todolist> todolist = todolistRepository.findByTodolistIdAndUser(
+            todolistId, user);
+        contentValidation.checkTodolistExist(todolist);
+    }
+
+    private LoginDto getLoginDto(HttpServletRequest request) {
+        contentValidation.checkAlreadyLogin(request);
+        return userSession.getLoginDtoFromSession(request);
     }
 
 
@@ -69,8 +79,8 @@ public class ContentService {
                 todolistRepository.findByTodoListName(putContentDto.getTodolistName()).get()
             );
         }
-
-        return contentRepository.findById(contentId).orElseThrow(() ->new NullPointerException());
+        contentValidation.checkModifyContentRoute(contentRepository.findById(contentId));
+        return contentRepository.findById(contentId).get();
     }
 
     public String deleteContent(Long todolistId, Long contentId){
@@ -83,17 +93,13 @@ public class ContentService {
 
     private Content getContent(Long todolistId, Long contentId) {
         Optional<Content> changeContent = contentRepository.findByContentIdAndTodolist(contentId,getTodolist(todolistId));
-        if (changeContent.isEmpty()) {
-            throw new RuntimeException();
-        }
+        contentValidation.checkContentExist(changeContent);
         return changeContent.get();
     }
 
     private Todolist getTodolist(Long todolistId) {
         Optional<Todolist> todolist = todolistRepository.findById(todolistId);
-        if (todolist.isEmpty()) {
-            throw new RuntimeException();
-        }
+        contentValidation.checkTodolistExist(todolist);
         return todolist.get();
     }
 }
