@@ -3,12 +3,11 @@ package arom.springtoy.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import arom.springtoy.content.repository.ContentRepository;
-import arom.springtoy.todolist.domain.Todolist;
-import arom.springtoy.todolist.dto.DateDto;
-import arom.springtoy.todolist.repository.TodolistRepository;
-import arom.springtoy.user.domain.User;
-import arom.springtoy.user.repository.UserRepository;
+import arom.springtoy.domain.domain.Todolist;
+import arom.springtoy.domain.domain.User;
+import arom.springtoy.domain.dto.DateDto;
+import arom.springtoy.domain.repository.TodolistRepository;
+import arom.springtoy.domain.repository.UserRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

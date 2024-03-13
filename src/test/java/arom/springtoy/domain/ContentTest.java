@@ -1,8 +1,8 @@
 package arom.springtoy.domain;
 
-import arom.springtoy.content.domain.Content;
-import arom.springtoy.todolist.domain.Todolist;
-import arom.springtoy.todolist.repository.TodolistRepository;
+import arom.springtoy.domain.domain.Content;
+import arom.springtoy.domain.domain.Todolist;
+import arom.springtoy.domain.repository.TodolistRepository;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;

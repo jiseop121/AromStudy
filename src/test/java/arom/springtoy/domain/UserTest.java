@@ -1,14 +1,11 @@
 package arom.springtoy.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import arom.springtoy.user.domain.User;
-import arom.springtoy.user.repository.UserRepository;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import java.util.Optional;
+import arom.springtoy.domain.domain.User;
+import arom.springtoy.domain.repository.UserRepository;
 import java.util.UUID;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

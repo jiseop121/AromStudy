@@ -1,12 +1,13 @@
 package arom.springtoy.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import arom.springtoy.user.domain.User;
-import arom.springtoy.user.dto.JoinDto;
-import arom.springtoy.user.dto.LoginDto;
-import arom.springtoy.user.repository.UserRepository;
-import arom.springtoy.user.service.UserService;
+import arom.springtoy.domain.domain.User;
+import arom.springtoy.domain.dto.JoinDto;
+import arom.springtoy.domain.dto.LoginDto;
+import arom.springtoy.domain.repository.UserRepository;
+import arom.springtoy.domain.service.UserService;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
