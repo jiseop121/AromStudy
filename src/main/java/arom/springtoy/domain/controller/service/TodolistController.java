@@ -10,9 +10,11 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +51,7 @@ public class TodolistController {
         return todolistService.findById(newTodoId);
     }
 
-    @PostMapping("/{todolistId}/delete")
+    @DeleteMapping("/{todolistId}")
     public String deleteTodolist(@PathVariable("todolistId") Long todolistId, HttpServletRequest request) {
         User user = todolistService.getUserFormLoginDto(request);
 
@@ -57,7 +59,7 @@ public class TodolistController {
         return "[" + deletedTodolistName + "] 리스트 삭제 완료";
     }
 
-    @PostMapping("/{todolistId}/put")
+    @PutMapping("/{todolistId}")
     public Todolist putTodolist(@PathVariable("todolistId") Long todolistId,
         @Valid @RequestBody PutTodolistDto putTodolistDto, HttpServletRequest request) {
         User user = todolistService.getUserFormLoginDto(request);
