@@ -42,9 +42,7 @@ public class UserService {
         return userSession.getLoginDtoFromSession(request);
     }
 
-    public User doLogin(LoginDto loginDto,HttpServletRequest request){
-        userValidation.checkAlreadyLogout(request);
-        userSession.setLoginAttribute(loginDto,request);
+    public User doLogin(LoginDto loginDto){
 
         String email = loginDto.getEmail();
         Optional<User> findUser = userRepository.findByEmail(email);
@@ -67,8 +65,7 @@ public class UserService {
         return findUser.getPasswordUUID().equals(UUID.nameUUIDFromBytes(password.getBytes()).toString());
     }
 
-    public User doSignUp(JoinDto joinDto,HttpServletRequest request){
-        userValidation.checkAlreadyLogin(request);
+    public User doSignUp(JoinDto joinDto){
         Optional<User> findUserByEmail = userRepository.findByEmail(joinDto.getEmail());
         userValidation.checkAlreadyExistUserBy(findUserByEmail);
 

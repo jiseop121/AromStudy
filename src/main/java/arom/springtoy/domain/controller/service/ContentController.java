@@ -5,6 +5,7 @@ import arom.springtoy.domain.dto.ContentDto;
 import arom.springtoy.domain.dto.PutContentDto;
 import arom.springtoy.domain.service.ContentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("todolist/{todolistId}/content")
+@RequestMapping("/api/todolist/{todolistId}/content")
 @Slf4j
 public class ContentController {
 
@@ -39,19 +40,19 @@ public class ContentController {
     }
 
     @PostMapping("/add")
-    public Content addContent(@PathVariable("todolistId") Long todolistId, @RequestBody ContentDto contentDto, HttpServletRequest request){
+    public Content addContent(@PathVariable("todolistId") Long todolistId, @Valid @RequestBody ContentDto contentDto, HttpServletRequest request){
         contentService.blockContent(request,todolistId);
         return contentService.addContent(todolistId,contentDto);
     }
 
     @PostMapping("/{contentId}/put")
-    public Content putContent(@PathVariable("todolistId") Long todolistId, @PathVariable("contentId") Long contentId,@RequestBody PutContentDto putContentDto, HttpServletRequest request){
+    public Content putContent(@PathVariable("todolistId") Long todolistId, @PathVariable("contentId") Long contentId, @Valid @RequestBody PutContentDto putContentDto, HttpServletRequest request){
         contentService.blockContent(request,todolistId);
         return contentService.modifyContent(todolistId,contentId,putContentDto);
     }
 
     @PostMapping("/{contentId}/delete")
-    public String deleteContent(@PathVariable("todolistId") Long todolistId, @PathVariable("contentId") Long contentId, @RequestBody PutContentDto putContentDto, HttpServletRequest request){
+    public String deleteContent(@PathVariable("todolistId") Long todolistId, @PathVariable("contentId") Long contentId, @Valid @RequestBody PutContentDto putContentDto, HttpServletRequest request){
         contentService.blockContent(request,todolistId);
         return contentService.deleteContent(todolistId,contentId)+"-> delete ok";
     }
