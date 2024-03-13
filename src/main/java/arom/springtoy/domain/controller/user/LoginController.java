@@ -4,7 +4,6 @@ import arom.springtoy.domain.dto.LoginDto;
 import arom.springtoy.domain.service.UserService;
 import arom.springtoy.domain.validation.UserValidation;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
     public LoginDto login(@Valid @RequestBody LoginDto loginDto, HttpServletRequest request){
-        userValidation.checkAlreadyLogout(request);
+        userValidation.checkAlreadyLogin(request);
         userSession.setLoginAttribute(loginDto,request);
         userService.doLogin(loginDto);
         log.info(loginDto.getEmail());

@@ -43,7 +43,7 @@ public class ContentService {
     }
 
     private LoginDto getLoginDto(HttpServletRequest request) {
-        contentValidation.checkAlreadyLogin(request);
+        contentValidation.checkAlreadyLogout(request);
         return userSession.getLoginDtoFromSession(request);
     }
 
