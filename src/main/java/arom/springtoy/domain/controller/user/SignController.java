@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignController {
 
     private final UserService userService;
-    private final UserSession userSession;
 
     @GetMapping
     public String signupForm(){
@@ -23,19 +22,18 @@ public class SignController {
     }
 
     @PostMapping("/signup")
-    public JoinDto signup(@RequestBody JoinDto joinDto){
-        userService.doSignUp(joinDto);
+    public JoinDto signup(@RequestBody JoinDto joinDto, HttpServletRequest request){
+        userService.doSignUp(joinDto, request);
         return joinDto;
     }
 
     @PostMapping("/signout")
     public String signout(HttpServletRequest request){
-        LoginDto loginUser = userSession.getLoginDtoFromSession(request);
-        if(loginUser==null){
-            return "do login first";
-        }
-        request.getSession(false).invalidate();
-        String lastNickname = userService.doSignout(loginUser);
+        String lastNickname = userService.doSignout(getLoginDto(request),request);
         return "Good bye!! ["+lastNickname+"]";
+    }
+
+    private LoginDto getLoginDto(HttpServletRequest request) {
+        return userService.getLoginUser(request);
     }
 }
