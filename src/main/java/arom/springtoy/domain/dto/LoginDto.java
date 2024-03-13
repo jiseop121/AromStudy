@@ -17,6 +17,6 @@ public class LoginDto {
     @Email
     private String email;
 
-    @NotNull @NotBlank
+    @NotNull @NotBlank(message = "비밀번호를 다시 입력해주세요")
     private String password;
 }

@@ -14,7 +14,7 @@ public class PutTodolistDto {
     @NotNull @NotBlank
     private String todolistName;
 
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 30,message = "너무 길게 입력하지마세요")
     private String writer;
 
     private Boolean isSuccess;

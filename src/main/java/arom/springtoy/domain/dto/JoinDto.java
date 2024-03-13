@@ -19,10 +19,10 @@ public class JoinDto {
     private String email;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "비밀번호를 다시 입력해주세요")
     private String password;
 
-    @NotNull @NotBlank
+    @NotNull @NotBlank(message = "비밀번호를 다시 입력해주세요")
     @Size(min = 1, max = 30)
     private String nickname;
 
