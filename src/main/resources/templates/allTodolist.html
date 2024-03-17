@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">To-Do List</h1>
+
+  <table class="table">
+    <thead class="thead-dark">
+    <tr>
+      <th>Todo List Name</th>
+      <th>Writer</th>
+      <th>Is Success</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Loop through each Todolist object in the list -->
+    <tr th:each="todolist : ${allTodolist}">
+      <!-- Display Todolist properties in table cells -->
+      <td th:text="${todolist.todoListName}">Todo List Name</td>
+      <td th:text="${todolist.writer}">Writer</td>
+      <td th:text="${todolist.isSuccess}">Is Success</td>
+      <td th:text="${#temporals.format(todolist.startDate, 'yyyy-MM-dd HH:mm')}">Start Date</td>
+      <td th:text="${#temporals.format(todolist.endDate, 'yyyy-MM-dd HH:mm')}">End Date</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
