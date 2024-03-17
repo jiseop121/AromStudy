@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.RequestEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RestController
@@ -26,17 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TodolistController {
 
     private final TodolistService todolistService;
-
-    @GetMapping
-    public List<Todolist> mainTodolist(HttpServletRequest request) {
-        User user = todolistService.getUserFormLoginDto(request);
-        return todolistService.findAllTodolistByUser(user);
-    }
-
-    @GetMapping("/build")
-    public String makeListForm() {
-        return "make list here";
-    }
 
     @PostMapping("/build")
     public Todolist makeTodolist(@Valid @RequestBody TodolistDto todolistDto, HttpServletRequest request) {
@@ -64,7 +56,6 @@ public class TodolistController {
         @Valid @RequestBody PutTodolistDto putTodolistDto, HttpServletRequest request) {
         User user = todolistService.getUserFormLoginDto(request);
 
-        return todolistService.modifyTodolist(user,todolistId, putTodolistDto);
+        return todolistService.modifyTodolist(user, todolistId, putTodolistDto);
     }
-
 }

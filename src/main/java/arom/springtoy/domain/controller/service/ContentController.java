@@ -26,21 +26,6 @@ public class ContentController {
 
     private final ContentService contentService;
 
-    @GetMapping
-    public List<Content> mainContent(@PathVariable("todolistId") Long todolistId, HttpServletRequest request){
-        contentService.blockContent(request,todolistId);
-        List<Content> allByTodolistId = contentService.findAllByTodolistId(todolistId);
-        for (Content content : allByTodolistId) {
-            log.info(content.getContentName());
-        }
-        List<Content> allByTodolistId1 = contentService.findAllByTodolistId(1L);
-        for (Content content : allByTodolistId1) {
-            log.info(content.getContentName());
-        }
-
-        return contentService.findAllByTodolistId(todolistId);
-    }
-
     @PostMapping("/add")
     public Content addContent(@PathVariable("todolistId") Long todolistId, @Valid @RequestBody ContentDto contentDto, HttpServletRequest request){
         contentService.blockContent(request,todolistId);

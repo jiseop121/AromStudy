@@ -23,14 +23,14 @@ public class LoginController {
     private final UserValidation userValidation;
     private final UserSession userSession;
 
-    @GetMapping("/login")
-    public String loginForm(HttpServletRequest request){
-        if(userService.checkAlreadyLogin(request)){
-            LoginDto loginUser = userService.getLoginUser(request);
-            return "welcome!!["+userService.userOfNickNameFindByEmail(loginUser.getEmail())+"]";
-        }
-        return "do login here";
-    }
+//    @GetMapping("/login")
+//    public String loginForm(HttpServletRequest request){
+//        if(userService.checkAlreadyLogin(request)){
+//            LoginDto loginUser = userService.getLoginUser(request);
+//            return "welcome!!["+userService.userOfNickNameFindByEmail(loginUser.getEmail())+"]";
+//        }
+//        return "do login";
+//    }
 
     @PostMapping("/login")
     @ResponseBody
