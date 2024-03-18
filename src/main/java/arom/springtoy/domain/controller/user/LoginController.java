@@ -8,8 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,18 +23,10 @@ public class LoginController {
     private final UserValidation userValidation;
     private final UserSession userSession;
 
-//    @GetMapping("/login")
-//    public String loginForm(HttpServletRequest request){
-//        if(userService.checkAlreadyLogin(request)){
-//            LoginDto loginUser = userService.getLoginUser(request);
-//            return "welcome!!["+userService.userOfNickNameFindByEmail(loginUser.getEmail())+"]";
-//        }
-//        return "do login";
-//    }
-
     @PostMapping("/login")
     @ResponseBody
-    public LoginDto login(@Valid @RequestBody LoginDto loginDto, HttpServletRequest request){
+    public LoginDto login(@Valid @ModelAttribute LoginDto loginDto, HttpServletRequest request){
+        log.info(loginDto.toString());
         userValidation.checkAlreadyLogin(request);
         userSession.setLoginAttribute(loginDto,request);
         userService.doLogin(loginDto);

@@ -29,7 +29,7 @@ public class ViewController {
     private final ContentService contentService;
     private final TodolistService todolistService;
 
-    @GetMapping("/api/todolist/show")
+    @GetMapping("/api/todolist")
     public String allTodolist(HttpServletRequest request, Model model){
 
         User user = todolistService.getUserFormLoginDto(request);
@@ -39,11 +39,12 @@ public class ViewController {
     }
 
     @GetMapping("/api/login")
-    public String loginForm(HttpServletRequest request,@ModelAttribute LoginDto loginDto){
+    public String loginForm(HttpServletRequest request,Model model){
         if(userService.checkAlreadyLogin(request)){
-            LoginDto loginUser = userService.getLoginUser(request);
+            userService.getLoginUser(request);
             return "welcome";
         }
+        model.addAttribute("loginDto",new LoginDto());
         return "loginForm";
     }
 
