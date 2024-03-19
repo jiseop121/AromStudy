@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1>Login</h1>
+  <form id="loginForm" action="/api/login" method="post" th:object="${loginDto}">
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" th:field="*{email}" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" th:field="*{password}" required>
+    </div>
+    <div>
+      <button type="submit">Login</button>
+    </div>
+  </form>
+</body>
+</html>

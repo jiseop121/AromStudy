@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">To-Do List Contents</h1>
+
+  <table class="table">
+    <thead class="thead-dark">
+    <tr>
+      <th>Content Name</th>
+      <th>Description</th>
+      <th>Is Success</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Loop through each Content object in the list -->
+    <tr th:each="content : ${allContentList}">
+      <!-- Display Content properties in table cells -->
+      <td th:text="${content.contentName}">Content Name</td>
+      <td th:text="${content.description}">Description</td>
+      <td th:text="${content.isSuccess}">Is Success</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
